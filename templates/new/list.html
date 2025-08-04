@@ -1,0 +1,31 @@
+{% extends "new/base.html" %} {% block content %}
+<div id="product-form">
+  <button class="btn btn-success mb-3" hx-get="{% url 'new_product_create' %}" hx-target="#product-form"
+    hx-swap="innerHTML">
+    +Add Product
+  </button>
+</div>
+
+<hr />
+<hr />
+<table border="1px">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Price</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+
+  <tbody id="product-list">
+    {% for product in products %}
+    {% include 'new/partiallist.html' %}
+    {% empty %}
+    <tr>
+      <td colspan="3">No products found.</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% endblock content %}

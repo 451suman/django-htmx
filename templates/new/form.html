@@ -1,0 +1,9 @@
+<form
+  method="post"
+  hx-post="{% url 'new_product_create' %}"
+  hx-target="#product-list"
+  hx-swap="beforeend"
+>
+  {% csrf_token %} {{ form.as_p }}
+  <button type="submit" class="btn btn-success">Save</button>
+</form>
