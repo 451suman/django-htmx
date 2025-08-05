@@ -1,9 +1,10 @@
 <form
   method="post"
-  hx-post="{% url 'new_product_create' %}"
-  hx-target="#product-list"
-  hx-swap="beforeend"
+  hx-post="{% if product %}{% url 'new_product_update' product.id %}{% else %}{% url 'new_product_create' %}{% endif %}"
+  hx-target="{% if product %}#product-{{ product.id }}{% else %}#product-list{% endif %}"
+  hx-swap="{% if product %}outerHTML{% else %}beforeend{% endif %}"
 >
-  {% csrf_token %} {{ form.as_p }}
+  {% csrf_token %}
+  {{ form.as_p }}
   <button type="submit" class="btn btn-success">Save</button>
 </form>

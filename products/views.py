@@ -45,12 +45,13 @@
 #         return HttpResponse("")
 #     return HttpResponseBadRequest("Invalid request")
 
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.template.loader import render_to_string
+from django.http import HttpResponse, HttpResponseRedirect
+from django.urls import reverse_lazy
 
-from django.shortcuts import render
-from django.views.generic import ListView, CreateView
-
-from products.forms import ProductForm
-from products.models import Product
+from .models import Product
+from .forms import ProductForm
 
 
 class ProductList(ListView):
@@ -62,19 +63,39 @@ class ProductList(ListView):
         return Product.objects.all().order_by("-created_at")
 
 
-from django.template.loader import render_to_string
-from django.http import HttpResponse
-from django.views.generic.edit import CreateView
-from .models import Product
-from .forms import ProductForm
-
-
 class ProductCreate(CreateView):
     model = Product
-    template_name = "new/form.html"
     form_class = ProductForm
+    template_name = "new/form.html"
 
     def form_valid(self, form):
         product = form.save()
         html = render_to_string("new/partiallist.html", {"product": product})
         return HttpResponse(html)
+
+    def form_invalid(self, form):
+        return render_to_string("new/form.html", {"form": form})
+
+
+class ProductUpdate(UpdateView):
+    model = Product
+    form_class = ProductForm
+    template_name = "new/form.html"
+
+    def form_valid(self, form):
+        product = form.save()
+        html = render_to_string("new/partiallist.html", {"product": product})
+        return HttpResponse(html)
+
+    def form_invalid(self, form):
+        return render_to_string("new/form.html", {"form": form})
+
+
+class ProductDelete(DeleteView):
+    model = Product
+    success_url = reverse_lazy("new_product_list")
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+        return HttpResponse("")  # empty response to trigger HTMX removal

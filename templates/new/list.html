@@ -1,14 +1,17 @@
-{% extends "new/base.html" %} {% block content %}
+{% extends "new/base.html" %}
+{% block content %}
 <div id="product-form">
-  <button class="btn btn-success mb-3" hx-get="{% url 'new_product_create' %}" hx-target="#product-form"
-    hx-swap="innerHTML">
-    +Add Product
+  <button class="btn btn-success mb-3" 
+          hx-get="{% url 'new_product_create' %}" 
+          hx-target="#product-form"
+          hx-swap="innerHTML">
+    + Add Product
   </button>
 </div>
 
 <hr />
-<hr />
-<table border="1px">
+
+<table border="1px" class="table">
   <thead>
     <tr>
       <th>Name</th>
@@ -16,10 +19,9 @@
       <th>Actions</th>
     </tr>
   </thead>
-
   <tbody id="product-list">
     {% for product in products %}
-    {% include 'new/partiallist.html' %}
+      {% include 'new/partiallist.html' %}
     {% empty %}
     <tr>
       <td colspan="3">No products found.</td>
@@ -27,5 +29,4 @@
     {% endfor %}
   </tbody>
 </table>
-
-{% endblock content %}
+{% endblock %}

@@ -1,6 +1,25 @@
+<tr id="product-{{ product.id }}">
+  <td>{{ product.name }}</td>
+  <td>${{ product.price }}</td>
+  <td>
+    <button
+      class="btn btn-sm btn-primary"
+      hx-get="{% url 'new_product_update' product.id %}"
+      hx-target="#product-form"
+      hx-swap="innerHTML"
+    >
+      Edit
+    </button>
 
- <tr>
-      <td>{{ product.name }}</td>
-      <td>{{ product.price}}</td>
-      <td></td>
-    </tr>
+    <form
+      hx-post="{% url 'product_delete' product.id %}"
+      hx-target="#product-{{ product.id }}"
+      hx-swap="outerHTML"
+      method="post"
+      style="display:inline"
+    >
+      {% csrf_token %}
+      <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+    </form>
+  </td>
+</tr>
